@@ -1,0 +1,40 @@
+<h3>Reactive Forms</h3>
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+<input type="text" formControlName="name" placeholder="Name">
+@if(myForm.controls.name.errors?.required && myForm.controls.name.touched){
+    <p>This filed is required</p><br>
+}
+@if(myForm.controls.name.errors?.minlength && myForm.controls.name.touched){
+    <p>This filed has min char of 3</p>
+} 
+<br><br><br>
+<input type="text" formControlName="email" placeholder="Email">
+@if(myForm.controls.email.errors?.required && myForm.controls.email.touched){
+    <p>This filed is required</p><br>
+}
+@if(myForm.controls.email.errors?.email && myForm.controls.email.touched){
+    <p>This filed is email</p><br>
+}
+@if(myForm.controls.email.errors?.emailExist && myForm.controls.email.touched){
+    <p>Email already exist</p><br>
+}
+<div formArrayName="businessAddress">
+    @for (bus of myForm.controls.businessAddress?.value; track $index; let i = $index) {
+        <ng-container [formGroupName]="i">
+            <br><input type="text" formControlName="addressLine1"><span (click)="onDelete(i)">--</span><br>
+            @if(myForm.controls.businessAddress.controls[i]?.controls.addressLine1.errors?.required && myForm.controls.businessAddress.controls[i]?.controls.addressLine1.touched){
+                <p>This filed is required</p><br>
+            }
+        </ng-container>
+    }
+</div>
+<button (click)="onAdd()">Add</button>
+<button>Submit</button>
+
+<pre>form Valid: {{myForm.valid}}</pre>
+<pre>form Value: {{myForm.value | json}}</pre>
+</form>
+
+<h3>Template Driven Forms</h3>
+<input type="text" [(ngModel)]="tName">
+<input type="text" [(ngModel)]="tEmail">
